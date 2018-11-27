@@ -67,6 +67,7 @@ type VMSpec struct {
 	Drives       []Drive       `yaml:"drives"`
 	Qemuport     uint          `yaml:"qemuport"`
 	HostIP       net.IP        `yaml:"host_ip"`
+	KVM          bool          `yaml:"no_kvm_enable"`
 }
 
 // CheckDirectory checks to see if a given absolute path exists and is

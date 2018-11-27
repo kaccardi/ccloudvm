@@ -63,9 +63,15 @@ func bootVM(ctx context.Context, ws *workspace, name string, in *types.VMSpec) e
 		"-m", memParam, "-smp", CPUsParam,
 		"-drive", fmt.Sprintf("file=%s,if=virtio,aio=threads,format=qcow2", vmImage),
 		"-drive", fmt.Sprintf("file=%s,if=virtio,media=cdrom", isoPath),
-		"-daemonize", "-enable-kvm", "-cpu", "host",
+		"-daemonize", "-cpu", "host",
 		"-net", "nic,model=virtio",
 		"-device", "virtio-rng-pci",
+	}
+
+	if in.KVM == true {
+		args = append(args, "-machine", "accel=kvm:tcg")
+	} else {
+		args = append(args, "-enable-kvm")
 	}
 
 	if BIOSPath != "" {
@@ -114,7 +120,7 @@ func bootVM(ctx context.Context, ws *workspace, name string, in *types.VMSpec) e
 
 	output, err := qemu.LaunchCustomQemu(ctx, "", args, nil, nil, nil)
 	if err != nil {
-		return fmt.Errorf("Failed to launch qemu : %v, %s", err, output)
+		return fmt.Errorf("Failed to launch qemu : %v, %s %s", err, output, args)
 	}
 	return nil
 }
