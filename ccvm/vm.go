@@ -69,9 +69,9 @@ func bootVM(ctx context.Context, ws *workspace, name string, in *types.VMSpec) e
 	}
 
 	if in.KVM == true {
-		args = append(args, "-machine", "accel=kvm:tcg")
+		args = append(args, "-cpu", "max", "-machine", "accel=kvm:tcg")
 	} else {
-		args = append(args, "-enable-kvm")
+		args = append(args, "-cpu", "host", "-enable-kvm")
 	}
 
 	if BIOSPath != "" {
