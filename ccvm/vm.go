@@ -63,13 +63,13 @@ func bootVM(ctx context.Context, ws *workspace, name string, in *types.VMSpec) e
 		"-m", memParam, "-smp", CPUsParam,
 		"-drive", fmt.Sprintf("file=%s,if=virtio,aio=threads,format=qcow2", vmImage),
 		"-drive", fmt.Sprintf("file=%s,if=virtio,media=cdrom", isoPath),
-		"-daemonize", "-cpu", "host",
+		"-daemonize",
 		"-net", "nic,model=virtio",
 		"-device", "virtio-rng-pci",
 	}
 
 	if in.KVM == true {
-		args = append(args, "-machine", "accel=kvm:tcg")
+		args = append(args, "-cpu", "max", "-machine", "accel=kvm:tcg")
 	} else {
 		args = append(args, "-cpu", "host", "-enable-kvm")
 	}
